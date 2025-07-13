@@ -5,55 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDoList</title>
     <style>
-        *{
+        * {
             padding: 0;
             margin: 0;
+            box-sizing: border-box;
             font-family: Arial, Helvetica, sans-serif;
         }
-        body{
-            height: 100vh;
+
+        body {
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
-        .container{
+
+        .container {
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             flex-direction: column;
-            padding: 10px;
+            padding: 20px;
             border: 1px solid rgba(128, 128, 128, 0.514);
             border-radius: 10px;
-            height: auto;
-            width: 370px;
+            width: 100%;
+            max-width: 400px;
             box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.356);
+            background-color: white;
         }
-        .container > h1{
+
+        .container > h1 {
             padding: 10px;
             margin: 10px;
+            font-size: 1.8rem;
         }
-        .campos{
+
+        .campos {
             height: 40px;
             margin-bottom: 10px;
+            display: flex;
+            width: 100%;
+            gap: 5px;
         }
-        .campos > input{
+
+        .campos > input {
+            flex: 1;
             text-align: center;
             border: 1px solid rgba(128, 128, 128, 0.377);
             box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.356);
             border-radius: 6px;
-            height: 100%;
-            width: 270px;
-            font-size: 20px;
+            font-size: 16px;
+            padding: 0 10px;
         }
-        .campos > button{
-            height: 100%;
-            width: 50px;
+
+        .campos > button {
+            width: 60px;
             background-color: rgb(49, 49, 141);
+            color: white;
+            font-weight: bold;
             border: 1px solid black;
             border-radius: 3px;
+            cursor: pointer;
         }
-        #tarefasAdicionadas{
+
+        #tarefasAdicionadas {
             display: flex;
             align-items: center;
             flex-direction: column;
@@ -62,16 +78,20 @@
             text-align: center;
             list-style-position: inside;
         }
+
         #tarefasAdicionadas > li {
             display: flex;
             justify-content: space-between;
-            align-items: center;          /* Alinha verticalmente */
+            align-items: center;
             width: 100%;
             background-color: #e9f0ff;
-            padding: 4px;
+            padding: 6px 10px;
+            margin-bottom: 6px;
             border-radius: 6px;
             box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+            word-break: break-word;
         }
+
         #tarefasAdicionadas > li > button {
             margin-left: 10px;
             color: grey;
@@ -80,12 +100,36 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         #tarefasAdicionadas > li::before {
-            content: "★ ";   /* marcador bolinha */
+            content: "★ ";
             color: black;
             font-weight: bold;
             margin-right: 8px;
         }
+
+        /* 🔻 Responsividade */
+        @media (max-width: 500px) {
+            .container {
+                padding: 15px;
+            }
+
+            .campos {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .campos > input,
+            .campos > button {
+                width: 100%;
+                font-size: 16px;
+            }
+
+            .campos > button {
+                margin-top: 5px;
+            }
+        }
+
     </style>
 </head>
 <body>
