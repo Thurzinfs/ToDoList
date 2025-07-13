@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDoList</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        body{
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex-direction: column;
+            padding: 10px;
+            border: 1px solid rgba(128, 128, 128, 0.514);
+            border-radius: 10px;
+            height: auto;
+            width: 370px;
+            box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.356);
+        }
+        .container > h1{
+            padding: 10px;
+            margin: 10px;
+        }
+        .campos{
+            height: 40px;
+            margin-bottom: 10px;
+        }
+        .campos > input{
+            text-align: center;
+            border: 1px solid rgba(128, 128, 128, 0.377);
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.356);
+            border-radius: 6px;
+            height: 100%;
+            width: 270px;
+            font-size: 20px;
+        }
+        .campos > button{
+            height: 100%;
+            width: 50px;
+            background-color: rgb(49, 49, 141);
+            border: 1px solid black;
+            border-radius: 3px;
+        }
+        #tarefasAdicionadas{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            margin: 5px 5px 8px 5px;
+            width: 100%;
+            text-align: center;
+            list-style-position: inside;
+        }
+        #tarefasAdicionadas > li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;          /* Alinha verticalmente */
+            width: 100%;
+            background-color: #e9f0ff;
+            padding: 4px;
+            border-radius: 6px;
+            box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+        }
+        #tarefasAdicionadas > li > button {
+            margin-left: 10px;
+            color: grey;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #tarefasAdicionadas > li::before {
+            content: "★ ";   /* marcador bolinha */
+            color: black;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ToDoList</h1>
+        <div class="campos">
+            <input type="text" name="item" id="tarefa" autocomplete="off" required placeholder="Add a new task">
+            <button onclick="addTarefa()" id="buttom">Add</button>
+        </div>
+        <ul id="tarefasAdicionadas">
+        </ul>
+        <script>
+            const API = "http://localhost:8000/api/tarefas"
+            function carregarTarefas(){
+                    fetch(API).then(resposta => resposta.json()).then(tarefas => {
+                        const lista = document.getElementById("tarefasAdicionadas");
+                        lista.innerHTML = "";
+                        tarefas.forEach((tarefa, i) => {
+                            const item = document.createElement("li")
+                            item.textContent = tarefa
+
+                            const btn = document.createElement("button");
+                            btn.textContent = "X"
+                            btn.onclick = () => removerTarefa(i)
+
+                            item.appendChild(btn);
+                            lista.appendChild(item)
+
+                        })
+                    })
+                }
+
+            function addTarefa(){
+                const input = document.getElementById("tarefa");
+                const texto = input.value;
+
+                if(texto===""){
+                    input.style.border = "1px solid red";
+                    return
+                }
+
+                input.style.border = "1px solid rgba(128, 128, 128, 0.377)";
+
+                fetch(API, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({texto})
+                }).then(() => {
+                    input.value = "";
+                    carregarTarefas()
+                })
+            }
+
+            function removerTarefa(i){
+                fetch(`${API}/${i}`, {
+                    method: "DELETE"
+                }).then(() => carregarTarefas())
+            }
+            carregarTarefas()
+            const btn = document.getElementById('tarefa');
+            btn.addEventListener('keydown', function (e) {
+                if (e.key == 'Enter'){
+                    addTarefa()
+                }
+            })
+        </script>
+    </div>
+</body>
+</html>
