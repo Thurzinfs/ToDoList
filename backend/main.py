@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+#uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
 app = FastAPI()
 
