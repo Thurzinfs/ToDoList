@@ -148,7 +148,7 @@
         <ul id="tarefasAdicionadas">
         </ul>
         <script>
-            const API = "http://localhost:8000/api/tarefas"
+            const API = "https://todolist-uh9g.onrender.com/api/tarefas"
             function carregarTarefas(){
                     fetch(API).then(resposta => resposta.json()).then(tarefas => {
                         const lista = document.getElementById("tarefasAdicionadas");
