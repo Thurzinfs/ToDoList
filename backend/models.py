@@ -21,6 +21,7 @@ class Tarefa(base):
 
 class TarefaSchema(BaseModel):
     tarefa: str
+    usuario_id: int
 
 class TarefaPublic(BaseModel):
     id: int
