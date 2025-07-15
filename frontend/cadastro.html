@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    h1{
+        margin-bottom: 20px;
+    }
+
+    .container {
+      background: #fff;
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.253);
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      padding: 12px 14px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: border 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    input:focus {
+      border-color: #4d90fe;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(77, 144, 254, 0.2);
+    }
+
+    button {
+      padding: 12px;
+      background: linear-gradient(90deg, #007bff, #0056d2);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(90deg, #0056d2, #003a99);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body>
+    <h1>Cadastre-se</h1>
+    <div class="container">
+        <form class="form" method="post" action="#" id="form">
+            <input type="text" name="nome" placeholder="Digite seu nome completo" autocomplete="off" required>
+            <input type="password" name="senha" placeholder="Crie uma senha" required>
+            <button type="submit">Cadastrar</button>
+        </form>
+    </div>
+
+    <script>
+        const url = "http://localhost:8000/api/ToDoList/registar"
+        const form = document.getElementById("form")
+
+        form.addEventListener("submit", function(event){
+            event.preventDefault();
+
+            const nome = document.getElementById('nome');
+            const senha = document.getElementById("senha");
+
+            fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    nome: nome,
+                    senha: senha
+                })
+            }).then(resp => resp.json()).then(data => {
+                localStorage.setItem('usuario', JSON.stringify(data));
+                location.href = "index.html";
+            }).catch(e => {
+                alert("[ERRO] Ops, ocorreu algum erro.")
+                console.log(e)
+            })
+        })
+    </script>
+</body>
+</html>

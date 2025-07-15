@@ -1,7 +1,11 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-#uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+from backend.models import TarefaSchema, TarefaPublic, UsuarioSchema, UsuarioPublic, Usuario, Tarefa
+from backend.database import get_session
+from sqlalchemy.orm import Session
+from typing import List
+from sqlalchemy import select
 
 app = FastAPI()
 
@@ -13,23 +17,63 @@ app.add_middleware(
     allow_headers = ["*"]
 )
 
-class Tarefa(BaseModel):
-    texto: str
+router = APIRouter(
+    prefix="/api/ToDoList",
+    tags=['/api']
+)
 
-tarefas = []
+app.include_router(router)
 
-@app.get("/api/tarefas")
-async def listar():
+@router.post(
+    path='/registar',
+    response_model=UsuarioPublic,
+)
+def criar_usuario(
+    usuario: UsuarioSchema,
+    session: Session = Depends(get_session)
+):
+    user = Usuario(**usuario.model_dump())
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return user
+
+@router.post(
+    path='/tarefa',
+    response_model=TarefaPublic
+)
+def registra_tarefa(
+    tarefa: TarefaSchema,
+    session: Session = Depends(get_session)
+):
+    regis_tarefa = Tarefa(**tarefa.model_dump())
+    session.add(regis_tarefa)
+    session.commit()
+    session.refresh(regis_tarefa)
+    return regis_tarefa
+
+@router.post(
+    path='/login',
+    response_model=UsuarioPublic
+)
+def login(
+    dados: UsuarioSchema,
+    session: Session = Depends(get_session)
+):
+    usuario = session.query(Usuario).filter_by(nome=dados.nome, senha=dados.senha).first()
+    if not usuario:
+        raise HTTPException(status_code=404, detail='User not Found')
+    return usuario
+
+@router.get(
+    path='/tarefas/{usuario_id}',
+    response_model=List[TarefaPublic]
+)
+def listar_tarefas(
+    usuario_id: int,
+    session: Session = Depends(get_session),
+
+):
+    query = session.scalars(select(Tarefa).where(Tarefa.usuario_id == usuario_id))
+    tarefas = query.all()
     return tarefas
-
-@app.post("/api/tarefas")
-async def adicionar_tarefa(tarefa: Tarefa):
-    tarefas.append(tarefa.texto)
-    return {"mensagem": "Sucesso ao adicionar tarefa."}
-
-@app.delete("/api/tarefas/{indice}")
-async def remover_tarefa(indice: int):
-    if 0 <= indice < len(tarefas):
-        tarefas.pop(indice)
-        return {"mensagem": "Tarefa removida com sucesso."}
-    return {"mensagem": "erro ao remover tarefa."}
