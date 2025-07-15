@@ -80,8 +80,8 @@
     <h1>Cadastre-se</h1>
     <div class="container">
         <form class="form" method="post" action="#" id="form">
-            <input type="text" name="nome" placeholder="Digite seu nome completo" autocomplete="off" required>
-            <input type="password" name="senha" placeholder="Crie uma senha" required>
+            <input type="text" name="nome" placeholder="Digite seu nome completo" autocomplete="off" required id="nome">
+            <input type="password" name="senha" placeholder="Crie uma senha" required id="senha">
             <button type="submit">Cadastrar</button>
         </form>
     </div>
@@ -93,8 +93,8 @@
         form.addEventListener("submit", function(event){
             event.preventDefault();
 
-            const nome = document.getElementById('nome');
-            const senha = document.getElementById("senha");
+            const nome = document.getElementById('nome').value;
+            const senha = document.getElementById("senha").value;
 
             fetch(url, {
                 method: 'POST',
