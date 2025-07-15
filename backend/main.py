@@ -1,8 +1,8 @@
 from fastapi import FastAPI, APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from .models import TarefaSchema, TarefaPublic, UsuarioSchema, UsuarioPublic, Usuario, Tarefa
-from .database import get_session
+from backend.models import TarefaSchema, TarefaPublic, UsuarioSchema, UsuarioPublic, Usuario, Tarefa
+from backend.database import get_session
 from sqlalchemy.orm import Session
 from typing import List
 from sqlalchemy import select
