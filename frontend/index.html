@@ -148,18 +148,20 @@
         <ul id="tarefasAdicionadas">
         </ul>
         <script>
-            const API = "https://todolist-uh9g.onrender.com/api/tarefas"
+            const usuario = JSON.parse(localStorage.getItem("usuario"));
+            const API_LISTAR = `https://todolist-uh9g.onrender.com/api/ToDoList/tarefas/${usuario.id}`;
+            const API_CADASTRAR = `https://todolist-uh9g.onrender.com/api/ToDoList/tarefa`;
             function carregarTarefas(){
-                    fetch(API).then(resposta => resposta.json()).then(tarefas => {
+                    fetch(API_LISTAR).then(resposta => resposta.json()).then(tarefas => {
                         const lista = document.getElementById("tarefasAdicionadas");
                         lista.innerHTML = "";
                         tarefas.forEach(tarefa => {
                             const item = document.createElement("li")
-                            item.textContent = tarefa
+                            item.textContent = tarefa.tarefa
 
                             const btn = document.createElement("button");
                             btn.textContent = "X"
-                            btn.onclick = () => removerTarefa(i)
+                            btn.onclick = () => removerTarefa(tarefa.id)
 
                             item.appendChild(btn);
                             lista.appendChild(item)
@@ -179,28 +181,34 @@
 
                 input.style.border = "1px solid rgba(128, 128, 128, 0.377)";
 
-                fetch(API, {
+                fetch(API_CADASTRAR, {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({texto})
+                    body: JSON.stringify({
+                        tarefa: texto,
+                        usuario_id: usuario.id
+                    })
                 }).then(() => {
                     input.value = "";
                     carregarTarefas()
                 })
             }
 
-            function removerTarefa(i){
-                fetch(`${API}/${i}`, {
+            function removerTarefa(id){
+                fetch(`https://todolist-uh9g.onrender.com/api/ToDoList/tarefa/${id}`, {
                     method: "DELETE"
                 }).then(() => carregarTarefas())
+                .catch(e => console.error("Erro ao remover tarefa:", e));
             }
-            carregarTarefas()
-            const btn = document.getElementById('tarefa');
-            btn.addEventListener('keydown', function (e) {
-                if (e.key == 'Enter'){
-                    addTarefa()
+
+            // Enter para adicionar
+            document.getElementById('tarefa').addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    addTarefa();
                 }
-            })
+            });
+
+            carregarTarefas();
         </script>
     </div>
 </body>
