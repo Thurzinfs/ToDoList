@@ -117,7 +117,7 @@
                     senha: senha
                 })
             }).then(resp => resp.json()).then(data => {
-                localStorage.setItem('usuario', JSON.stringify(data));
+                const user = localStorage.setItem('usuario', JSON.stringify(data));
                 location.href = "index.html";
             }).catch(e => {
                 

@@ -76,4 +76,17 @@ def listar_tarefas(
     tarefas = query.all()
     return tarefas
 
+@router.delete(
+    path='/remove/{tarefa_id}'
+)
+def delete_tarefa(
+    tarefa_id: int,
+    session: Session = Depends(get_session)
+):
+    tarefa = session.get(Tarefa, tarefa_id)
+    if not tarefa:
+        raise HTTPException(status_code=404, detail="Tarefa not Found")
+    session.delete(tarefa)
+    session.commit()
+
 app.include_router(router)
