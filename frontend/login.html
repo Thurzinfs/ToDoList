@@ -117,8 +117,8 @@
                     senha: senha
                 })
             }).then(resp => resp.json()).then(data => {
-                localStorage.setItem('usuario', JSON.stringify(data))
-                location.href = "index.html"
+                localStorage.setItem('usuario', JSON.stringify(data));
+                location.href = "index.html";
             }).catch(e => {
                 
                 erro.textContent = "Erro ao efetuar login "

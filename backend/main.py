@@ -1,8 +1,8 @@
 from fastapi import FastAPI, APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from models import TarefaSchema, TarefaPublic, UsuarioSchema, UsuarioPublic, Usuario, Tarefa
-from database import get_session
+from .models import TarefaSchema, TarefaPublic, UsuarioSchema, UsuarioPublic, Usuario, Tarefa
+from .database import get_session
 from sqlalchemy.orm import Session
 from typing import List
 from sqlalchemy import select
@@ -21,8 +21,6 @@ router = APIRouter(
     prefix="/api",
     tags=['/api']
 )
-
-app.include_router(router)
 
 @router.post(
     path='/registar',
@@ -77,3 +75,5 @@ def listar_tarefas(
     query = session.scalars(select(Tarefa).where(Tarefa.usuario_id == usuario_id))
     tarefas = query.all()
     return tarefas
+
+app.include_router(router)
