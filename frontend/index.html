@@ -149,8 +149,9 @@
         </ul>
         <script>
             const usuario = JSON.parse(localStorage.getItem("usuario"));
-            const API_LISTAR = `https://todolist-uh9g.onrender.com/api/ToDoList/tarefas/${usuario.id}`;
-            const API_CADASTRAR = `https://todolist-uh9g.onrender.com/api/ToDoList/tarefa`;
+            console.log(`usuario: ${usuario}`)
+            const API_LISTAR = `https://todolist-uh9g.onrender.com/api/tarefas/${usuario.id}`;
+            const API_CADASTRAR = `https://todolist-uh9g.onrender.com/api/tarefa`;
             function carregarTarefas(){
                     fetch(API_LISTAR).then(resposta => resposta.json()).then(tarefas => {
                         const lista = document.getElementById("tarefasAdicionadas");
@@ -195,7 +196,7 @@
             }
 
             function removerTarefa(id){
-                fetch(`https://todolist-uh9g.onrender.com/api/ToDoList/tarefa/${id}`, {
+                fetch(`https://todolist-uh9g.onrender.com/api/tarefa/${id}`, {
                     method: "DELETE"
                 }).then(() => carregarTarefas())
                 .catch(e => console.error("Erro ao remover tarefa:", e));
