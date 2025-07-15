@@ -117,8 +117,13 @@
                     senha: senha
                 })
             }).then(resp => resp.json()).then(data => {
-                const user = localStorage.setItem('usuario', JSON.stringify(data));
-                location.href = "index.html";
+                if (data && data.id) {
+                    localStorage.setItem('usuario', JSON.stringify(data));
+                    location.href = "index.html";
+                } else {
+                    alert("Erro ao cadastrar. Tente novamente.");
+                    console.error("Erro ao logar:", data);
+                }
             }).catch(e => {
                 
                 erro.textContent = "Erro ao efetuar login "
