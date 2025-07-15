@@ -18,7 +18,7 @@ app.add_middleware(
 )
 
 router = APIRouter(
-    prefix="/api/ToDoList",
+    prefix="/api",
     tags=['/api']
 )
 
